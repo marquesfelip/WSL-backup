@@ -5,7 +5,7 @@ from datetime import datetime
 import customtkinter as ctk
 
 ctk.set_appearance_mode('light')
-ctk.set_default_color_theme('')
+ctk.set_default_color_theme('dark-blue')
 
 class Home:
     """
@@ -87,7 +87,8 @@ class Home:
             ['cd', file_path],
             check=False,
             capture_output=True,
-            text=True
+            text=True,
+            shell=True
         )
 
         # Retorna caso o caminho informado não exista
@@ -95,18 +96,15 @@ class Home:
             print("O caminho não existe!")
             return
 
-        wsl_export = subprocess.Popen(
+        wsl_export = subprocess.run(
             command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+            check=False,
+            capture_output=True,
+            text=True
         )
 
-        wsl_export.wait()
-
-        stdout, stderr =wsl_export.communicate()
-
         if wsl_export.returncode:
-            print(f"Erro ao exportar VM: {stderr.decode('utf-8')}")
+            print(f"Erro ao exportar VM: {wsl_export.returncode}")
             print(wsl_export)
 
         print("Backup finalizado!")
